@@ -26,8 +26,7 @@ namespace {
         bool processLoopAndSubloops(Loop *L);
         bool runOnLoop(Loop *L);
         bool isCandidateOpcode(Instruction *I) const;
-        bool isLoopInvariantInst(Instruction *I, Loop *L,
-                                  const SmallPtrSetImpl<Instruction *> &Invariant) const;
+        bool isLoopInvariantInst(Instruction *I, Loop *L, const SmallPtrSetImpl<Instruction *> &Invariant) const;
     };
 
 }
@@ -46,7 +45,6 @@ bool LICM::runOnFunction(Function &F) {
         return false;
 
     LoopInfo &LI = getAnalysis<LoopInfoWrapperPass>().getLoopInfo();
-
     bool Changed = false;
     for (Loop *L : LI)
         Changed |= processLoopAndSubloops(L);
@@ -77,9 +75,7 @@ bool LICM::isCandidateOpcode(Instruction *I) const {
     }
 }
 
-bool LICM::isLoopInvariantInst(
-    Instruction *I, Loop *L,
-    const SmallPtrSetImpl<Instruction *> &Invariant) const {
+bool LICM::isLoopInvariantInst(Instruction *I, Loop *L, const SmallPtrSetImpl<Instruction *> &Invariant) const {
 
     if (!isCandidateOpcode(I))
         return false;
@@ -133,9 +129,9 @@ bool LICM::runOnLoop(Loop *L) {
     for (Instruction *I : HoistOrder)
         I->moveBefore(InsertPt);
 
-    errs() << "[LICM] Hoistovano " << HoistOrder.size() << " instrukcija u preheader petlje '" << L->getHeader()->getName() << "'\n";
+    errs() << "Hositovano " << HoistOrder.size() << " instrukcija u preheder petlje '" << L->getHeader()->getName() << "'\n";
 
     return true;
 }
 
-static RegisterPass<LICM> X("my-licm", "Custom Loop Invariant Code Motion Pass", false ,false);
+static RegisterPass<LICM> X("my-licm", "Custom loop invariant code motion pass", false ,false);
